@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="DuTz"><meta name="renderer" content="webkit"><meta name="copyright" content="DuTz"><meta name="keywords" content="Du"><meta name="description" content=""><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Java · Mr.Du's blog</title><link rel="stylesheet" href="/css/style.css?v=2021.4.14"><link rel="stylesheet" href="/css/animation.css?v=2021.4.14"><link rel="icon" href="/img/assets/favicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
+    }
+    return function(){
+      return ret;
+    };
+  })();
+
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
+    }
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
+
+
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2021.4.14" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><meta name="generator" content="Hexo 5.4.0"></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/cat.png"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">DuTz</div><div class="profile-signature">for me</div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Mr.Du's blog</a></div><div class="intro-nav-label-box"><a href="/">Home</a><a href="/个人简介/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">Home</a><a href="/个人简介/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">Java</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2021-08-17</span></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><h2 id="Arrays类"><a href="#Arrays类" class="headerlink" title="Arrays类"></a>Arrays类</h2><p>Arrays类是包含在java.util包中的一个方便对数组操作的类，其中包含升序，降序排列以及查询等操作。</p>
+<h3 id="Arrays类常用方法"><a href="#Arrays类常用方法" class="headerlink" title="Arrays类常用方法"></a>Arrays类常用方法</h3><h4 id="boolean-equals-array1-array2"><a href="#boolean-equals-array1-array2" class="headerlink" title="boolean equals (array1,array2)"></a>boolean equals (array1,array2)</h4><p>各种类型数组均可使用，下面以boolean数组为例：<br>public static boolean equals(boolean[] a,<br>                             boolean[] a2)</p>
+<p>比较array1和array2是否相等。如果两个指定的 boolean 型数组彼此 相等，则返回 true。如果两个数组包含相同数量的元素，并且两个数组中的所有相应元素对都是相等的，则认为这两个数组是相等的。换句话说，如果两个数组以相同顺序包含相同的元素，则两个数组是相等的。此外，如果两个数组引用都为 null，则认为它们是相等的。<br>eg：int a = boolean equals (array1,array2);</p>
+<h4 id="sort-array"><a href="#sort-array" class="headerlink" title="sort(array)"></a>sort(array)</h4><p>public static void sort(arrays[] a)<br>对指定的特定类型arrays数组按数字升序进行排序。<br>eg:sort(arrya1);</p>
+<h4 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h4><p>public static String toString(boolean[] a)<br>    返回指定数组内容的字符串表示形式。字符串表示形式由数组的元素列表组成，括在方括号（ “[]”）中。相邻元素用字符 “, “（逗号加空格）分隔。这些元素通过 String.valueOf(boolean) 转换为字符串。如果 a 为 null，则返回 “null”。 </p>
+<h4 id="fill"><a href="#fill" class="headerlink" title="fill"></a>fill</h4><p>public static void fill(arrays[] a, val)<br>    将指定的 val 值分配给指定 arrays 数组的每个元素。</p>
+<h4 id="copyOf"><a href="#copyOf" class="headerlink" title="copyOf"></a>copyOf</h4><p>public static int[] copyOf(int[] original,<br>                           int newLength)<br>    复制指定的数组，截取或用 0 填充（如有必要），以使副本具有指定的长度。对于在原数组和副本中都有效的所有索引，这两个数组将包含相同的值。对于在副本中有效而在原数组无效的所有索引，副本将包含 0。当且仅当指定长度大于原数组的长度时，这些索引存在。<br>    即如果指定新数组长度要大于原数组长度，新数组中空值用0填充。新数组的长度小于原数组的话，只拷贝最前面的数据元素。<br>    参数：<br>        original - 要复制的数组<br>        newLength - 要返回的副本的长度</p>
+<h4 id="binarySearch"><a href="#binarySearch" class="headerlink" title="binarySearch"></a>binarySearch</h4><p>public static int binarySearch(int[] a,int fromIndex,int toIndex,int key)</p>
+<pre><code>使用二分搜索法来搜索指定的 int 型数组的范围，以获得指定的值。返回下标。
+必须在进行此调用之前对范围进行排序（通过 sort(int[], int, int 方法）。
+如果没有对范围进行排序，则结果是不确定的。如果范围包含多个带有指定值的元素，则无法保证找到的是哪一个。 
+</code></pre>
+<p>eg: int index=binarySearch(int[] a,val)<br>找到val在数组中的位置并返回其下标。</p>
+<p><img src="../pictures/arrays.jpg"></p>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="https://1203996820qq@.com">DuTz</a></p><p> <span>Link:  </span><a href="https://1203996820qq@.com/2021/08/17/Arrays/">https://1203996820qq@.com/2021/08/17/Arrays/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license noopener" target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="nextSlogan" href="/2021/08/11/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F/" title="冒泡排序的Java实现"><span>NextPost ></span><br><span class="nextTitle">冒泡排序的Java实现</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a target="_blank" rel="noopener" href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Arrays%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">Arrays类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Arrays%E7%B1%BB%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">Arrays类常用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#boolean-equals-array1-array2"><span class="toc-number">1.1.1.</span> <span class="toc-text">boolean equals (array1,array2)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sort-array"><span class="toc-number">1.1.2.</span> <span class="toc-text">sort(array)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#toString-NaN"><span class="toc-number">1.1.3.</span> <span class="toc-text">toString</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fill"><span class="toc-number">1.1.4.</span> <span class="toc-text">fill</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#copyOf"><span class="toc-number">1.1.5.</span> <span class="toc-text">copyOf</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#binarySearch"><span class="toc-number">1.1.6.</span> <span class="toc-text">binarySearch</span></a></li></ol></li></ol></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
